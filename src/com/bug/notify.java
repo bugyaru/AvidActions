@@ -6,15 +6,11 @@
 package com.bug;
 
 import java.util.Properties;
-import javax.activation.CommandMap;
-import javax.activation.MailcapCommandMap;
 import javax.mail.*;
-import javax.mail.Provider;
 import javax.mail.internet.*;
 
 /**
- * <notify type="xml" outpath="./" xslt="" />
- * <notify type="mail" sendto="" recepient="" subject="">HI!</notify>
+ * 
  *
  * @author bkantor
  */
@@ -23,6 +19,7 @@ public class notify {
     private String type = "";
     private String outpath = "";
     private String xslt = "";
+    private String xml = "";
     private String sendto = "";
     private String recepient = "";
     private String subject = "";
@@ -38,6 +35,19 @@ public class notify {
     public notify() {
     }
 
+    public String getXml() {
+        return xml;
+    }
+
+    public Boolean getTls() {
+        return tls;
+    }
+
+    public Boolean getAuth() {
+        return auth;
+    }
+    
+    
     public String getType() {
         return type;
     }
@@ -94,6 +104,11 @@ public class notify {
         this.xslt = xslt;
     }
 
+    public void setXml(String xml) {
+        this.xml = xml;
+    }
+    
+
     public void setSMTP(String host, int port, Boolean auth, String user, String pass, Boolean tls) {
         this.host = host;
         this.port = port;
@@ -106,7 +121,6 @@ public class notify {
         prop.put("mail.smtp.host", host);
         prop.put("mail.smtp.port", String.valueOf(port));
         prop.put("mail.smtp.starttls.enable", String.valueOf(tls));
-
     }
 
     public void setMail(String sendto, String recepient, String subject, String body) {
@@ -118,7 +132,7 @@ public class notify {
 
     public String sendNotify() {
         if ("xml".equals(type)) {
-
+            
             return "xml";
         } else if ("mail".equals(type)) {
             Session session;
