@@ -94,12 +94,14 @@ public class AvidErrorActions {
             if (!SOAPFilter.isEmpty() && !SOAPFilteract.isEmpty()) {
                 Q.setSOAPAction(SOAPFilteract);
                 Q.setFilterBody(SOAPFilter);
+                Q.setFilterTag("workflowEngine_GetWorkflowsResult");
+                Q.setFilterTagName("WorkflowInfo");
+                Q.setFilterPrefix("SOAPFilter");
                 try {
                     System.out.println(Q.getAnsver());
-                } catch (UnsupportedEncodingException ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(AvidErrorActions.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                System.out.println(SOAPFilter);
             }
             if (!SOAPVarNameact.isEmpty() && !SOAPVarValueact.isEmpty() && !SOAPVarNames.isEmpty() && !SOAPVarValues.isEmpty()) {
 
@@ -125,6 +127,7 @@ public class AvidErrorActions {
                                 act.getJSONArray("notify").getJSONObject(ii).getString("subject"),
                                 act.getJSONArray("notify").getJSONObject(ii).getString("content")
                         );
+                        //ntf.sendNotify();
                     }
                     if (ntf.getType().equals("xml")) {
                     }

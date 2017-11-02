@@ -10,7 +10,7 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 /**
- * 
+ *
  *
  * @author bkantor
  */
@@ -46,8 +46,7 @@ public class notify {
     public Boolean getAuth() {
         return auth;
     }
-    
-    
+
     public String getType() {
         return type;
     }
@@ -107,7 +106,6 @@ public class notify {
     public void setXml(String xml) {
         this.xml = xml;
     }
-    
 
     public void setSMTP(String host, int port, Boolean auth, String user, String pass, Boolean tls) {
         this.host = host;
@@ -117,10 +115,16 @@ public class notify {
         this.auth = auth;
         this.tls = tls;
         prop = new Properties();
+        prop.put("mail.smtps.auth", String.valueOf(auth));
+        prop.put("mail.smtps.host", host);
+        prop.put("mail.smtps.port", String.valueOf(port));
+        prop.put("mail.smtps.starttls.enable", String.valueOf(tls));
         prop.put("mail.smtp.auth", String.valueOf(auth));
         prop.put("mail.smtp.host", host);
         prop.put("mail.smtp.port", String.valueOf(port));
         prop.put("mail.smtp.starttls.enable", String.valueOf(tls));
+        prop.setProperty("mail.user", user);
+        prop.setProperty("mail.password", pass);
     }
 
     public void setMail(String sendto, String recepient, String subject, String body) {
@@ -132,28 +136,33 @@ public class notify {
 
     public String sendNotify() {
         if ("xml".equals(type)) {
-            
+
             return "xml";
         } else if ("mail".equals(type)) {
-            Session session;
-            if (auth) {
-                session = Session.getDefaultInstance(prop,
-                        new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(user, pass);
-                    }
-                });
-            } else {
-                session = Session.getDefaultInstance(prop);
-            }
+            Session session = null;
+            Transport trnsport;
             try {
+                if (auth) {
+                    session = Session.getDefaultInstance(prop);
+                    trnsport = session.getTransport("smtps");
+
+                } else {
+                    session = Session.getDefaultInstance(prop);
+                    trnsport = session.getTransport("smtp");
+                }
+
                 Message message = new MimeMessage(session);
                 message.setFrom(new InternetAddress(recepient));
                 message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(sendto));
                 message.setSubject(subject);
                 message.setText(body);
-                Transport.send(message);
-            } catch (MessagingException e) {
+                trnsport.connect(null, pass);
+                message.saveChanges();
+                trnsport.sendMessage(message, message.getAllRecipients());
+                trnsport.close();
+                System.out.println("Sent message successfully....");
+
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return "mail";

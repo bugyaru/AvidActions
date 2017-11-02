@@ -4,7 +4,7 @@
 		<CheckTime>1000</CheckTime>
 		<AvidWFE_Url>http://a5-as03:9900/WorkflowEngineWS_1/WFE.asmx</AvidWFE_Url>
 		<AvidWFE_AcceptEncoding>gzip,deflate</AvidWFE_AcceptEncoding>
-		<AvidWFE_ContentType>text/xml;charset=UTF-8</AvidWFE_ContentType>
+		<AvidWFE_ContentType><![CDATA[text/xml;charset=UTF8]]></AvidWFE_ContentType>
 		<smtp host="smtp.tvc.local" port="25" auth="false" tls="false" user="" pass="" />
 	</General>
 	<Action>
@@ -13,8 +13,6 @@
 				<wfe:workflowEngine_GetWorkflows>
 					<wfe:type>TVC_IMPORT_VIDEO_PreProcess</wfe:type>
 					<wfe:status>4</wfe:status>
-					<wfe:minStartTime>{checkTime}</wfe:minStartTime>
-					<wfe:maxStartTime>{currentTime}</wfe:maxStartTime>
 					<wfe:maxHits>1000</wfe:maxHits>
 				</wfe:workflowEngine_GetWorkflows>
 			]]>
@@ -37,21 +35,14 @@
 		<custFilterparam answer="SOAPFilter" name="errorMessage" like="not in House format"/>
 		<notify type="xml" outpath="./" xslt="" />
 		<!--notify type="mail" sendto="bug-b@tvc.ru" recepient="bug-b@tvc.ru" subject="test">HI!</notify-->
+		<notify type="mail" sendto="bug-b@ya.ru" recepient="bug-b@ya.ru" subject="test">HI!</notify>
 		<notify />
 		<command type="exec" cmd="" param="" />
 		<command type="script" cmd="" name="" param="" />
 	</Action>
 	<Action>
 		<SOAPFilter action="http://www.blue-order.com/ma/workflowenginews/wfe/workflowEngine_GetWorkflows">
-			<![CDATA[
-				<wfe:workflowEngine_GetWorkflows>
-					<wfe:type>TVC_IMPORT_VIDEO_PreProcess</wfe:type>
-					<wfe:status>4</wfe:status>
-					<wfe:minStartTime>{checkTime}</wfe:minStartTime>
-					<wfe:maxStartTime>{currentTime}</wfe:maxStartTime>
-					<wfe:maxHits>1000</wfe:maxHits>
-				</wfe:workflowEngine_GetWorkflows>
-			]]>
+<![CDATA[<wfe:workflowEngine_GetWorkflows><wfe:type>TVC_IMPORT_VIDEO_PreProcess</wfe:type><wfe:status>4</wfe:status><wfe:minStartTime>{checkTime}</wfe:minStartTime><wfe:maxStartTime>{currentTime}</wfe:maxStartTime><wfe:maxHits>1000</wfe:maxHits></wfe:workflowEngine_GetWorkflows>]]>
 		</SOAPFilter>
 		<SOAPNames action="http://www.blue-order.com/ma/workflowenginews/wfe/workflowEngine_GetVariableNameArrayListFromJobID">
 			<![CDATA[
